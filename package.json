@@ -1,5 +1,5 @@
 {
-  "name": "work-dashboard-adapter-jira",
+  "name": "jira-adapter",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/AGrzes/work-dashboard-adapter-jira.git"
+    "url": "git+ssh://git@github.com/AGrzes/jira-adapter.git"
   },
   "author": "Grzegorz Abramczyk <abramczykg@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AGrzes/work-dashboard-adapter-jira/issues"
+    "url": "https://github.com/AGrzes/jira-adapter/issues"
   },
-  "homepage": "https://github.com/AGrzes/work-dashboard-adapter-jira#readme"
+  "homepage": "https://github.com/AGrzes/jira-adapter#readme"
 }
