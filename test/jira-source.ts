@@ -23,5 +23,12 @@ describe('JiraClient', function() {
         expect(request).to.exist
       })
     })
+    it('should send jql', function() {
+      moxios.stubRequest('/rest/api/2/search', {response:{}})
+      return client.all().forEach(() => {
+        const request = moxios.requests.get('POST', '/rest/api/2/search')
+        expect(JSON.parse(request.config.data)).to.have.property('jql').equals('')
+      })
+    })
   })
 })
