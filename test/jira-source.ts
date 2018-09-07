@@ -28,26 +28,37 @@ describe('JiraClient', function() {
   })
   describe('all', function() {
     const client = new JiraClient(axios)
-    it('should call jira search', function() {
+    it('should call jira search', function(done) {
       responses({response: { }})
-      return client.all().forEach(() => {
+      client.all().subscribe({complete() {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(request).to.exist
-      })
+        done()
+      }, error: done})
     })
-    it('should send jql', function() {
+    it('should send jql', function(done) {
       responses({response: { }})
-      return client.all().forEach(() => {
+      client.all().subscribe({complete() {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(JSON.parse(request.config.data)).to.have.property('jql').equals('')
-      })
+        done()
+      }, error: done})
     })
-    it('should send fields', function() {
+    it('should send fields', function(done) {
       responses({response: { }})
-      return client.all().forEach(() => {
+      client.all().subscribe({complete() {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(JSON.parse(request.config.data)).to.have.property('fields').deep.equals(['*all'])
-      })
+        done()
+      }, error: done})
+    })
+    it('should send maxResults ', function(done) {
+      responses({response: { }})
+      client.all().subscribe({complete() {
+        const request = moxios.requests.get('POST', '/rest/api/2/search')
+        expect(JSON.parse(request.config.data)).to.have.property('maxResults').deep.equals(50)
+        done()
+      }, error: done})
     })
     it('should return issues', function(done) {
       responses({response: { issues: ['a', 'b', 'c']}}, {response: { }})
@@ -55,7 +66,7 @@ describe('JiraClient', function() {
         next(result) {
           expect(result).to.deep.equals(['a', 'b', 'c'])
           done()
-        }
+        }, error: done
       })
     })
     it('should combine pages', function(done) {
@@ -64,7 +75,7 @@ describe('JiraClient', function() {
         next(result) {
           expect(result).to.deep.equals(['a', 'b', 'c'])
           done()
-        }
+        }, error: done
       })
     })
   })
