@@ -11,7 +11,7 @@ export class JiraClient {
       const nextPage = () => this.client.post('/rest/api/2/search', {
         jql: '', fields: ['*all'], maxResults: 50, startAt
       }).then((response) => {
-        if (response.data.issues) {
+        if (response.data.issues && response.data.issues.length) {
           response.data.issues.forEach((issue) => observer.next(issue))
           startAt = startAt + 50
           nextPage()

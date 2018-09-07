@@ -69,6 +69,15 @@ describe('JiraClient', function() {
         }, error: done
       })
     })
+    it('should stop on empty page', function(done) {
+      responses({response: { issues: ['a', 'b', 'c']}}, {response: {issues: [] }})
+      client.all().pipe(toArray()).subscribe({
+        next(result) {
+          expect(result).to.deep.equals(['a', 'b', 'c'])
+          done()
+        }, error: done
+      })
+    })
     it('should combine pages', function(done) {
       responses({response: { issues: ['a', 'b']}}, {response: { issues: ['c']}}, {response: { }})
       client.all().pipe(toArray()).subscribe({
@@ -82,9 +91,9 @@ describe('JiraClient', function() {
       responses({response: { issues: ['a', 'b']}}, {response: { issues: ['c']}}, {response: { }})
       client.all().subscribe({
         complete() {
-          expect(JSON.parse(moxios.requests.at(0).config.data)).to.have.property('startAt',0)
-          expect(JSON.parse(moxios.requests.at(1).config.data)).to.have.property('startAt',50)
-          expect(JSON.parse(moxios.requests.at(2).config.data)).to.have.property('startAt',100)
+          expect(JSON.parse(moxios.requests.at(0).config.data)).to.have.property('startAt', 0)
+          expect(JSON.parse(moxios.requests.at(1).config.data)).to.have.property('startAt', 50)
+          expect(JSON.parse(moxios.requests.at(2).config.data)).to.have.property('startAt', 100)
           done()
         }, error: done
       })
