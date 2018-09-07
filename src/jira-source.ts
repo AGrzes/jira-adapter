@@ -7,10 +7,13 @@ export class JiraClient {
 
   public all(): Observable<any> {
     return Observable.create((observer: Observer<any>) => {
-      const nextPage = () => this.client.post('/rest/api/2/search', {jql: '', fields: ['*all'], maxResults: 50})
-      .then((response) => {
+      let startAt = 0
+      const nextPage = () => this.client.post('/rest/api/2/search', {
+        jql: '', fields: ['*all'], maxResults: 50, startAt
+      }).then((response) => {
         if (response.data.issues) {
           response.data.issues.forEach((issue) => observer.next(issue))
+          startAt = startAt + 50
           nextPage()
         } else {
           observer.complete()

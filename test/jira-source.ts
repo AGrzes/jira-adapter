@@ -78,5 +78,16 @@ describe('JiraClient', function() {
         }, error: done
       })
     })
+    it('should increment startAt', function(done) {
+      responses({response: { issues: ['a', 'b']}}, {response: { issues: ['c']}}, {response: { }})
+      client.all().subscribe({
+        complete() {
+          expect(JSON.parse(moxios.requests.at(0).config.data)).to.have.property('startAt',0)
+          expect(JSON.parse(moxios.requests.at(1).config.data)).to.have.property('startAt',50)
+          expect(JSON.parse(moxios.requests.at(2).config.data)).to.have.property('startAt',100)
+          done()
+        }, error: done
+      })
+    })
   })
 })
