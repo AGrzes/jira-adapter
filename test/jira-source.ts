@@ -2,6 +2,7 @@ import axios from 'axios'
 import {expect} from 'chai'
 import 'mocha'
 import * as moxios from 'moxios'
+import {toArray} from 'rxjs/operators'
 import {JiraClient} from '../src/jira-source'
 
 describe('JiraClient', function() {
@@ -17,24 +18,33 @@ describe('JiraClient', function() {
   describe('all', function() {
     const client = new JiraClient(axios)
     it('should call jira search', function() {
-      moxios.stubRequest('/rest/api/2/search', {response:{}})
+      moxios.stubRequest('/rest/api/2/search', {response: {}})
       return client.all().forEach(() => {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(request).to.exist
       })
     })
     it('should send jql', function() {
-      moxios.stubRequest('/rest/api/2/search', {response:{}})
+      moxios.stubRequest('/rest/api/2/search', {response: {}})
       return client.all().forEach(() => {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(JSON.parse(request.config.data)).to.have.property('jql').equals('')
       })
     })
     it('should send fields', function() {
-      moxios.stubRequest('/rest/api/2/search', {response:{}})
+      moxios.stubRequest('/rest/api/2/search', {response: {}})
       return client.all().forEach(() => {
         const request = moxios.requests.get('POST', '/rest/api/2/search')
         expect(JSON.parse(request.config.data)).to.have.property('fields').deep.equals(['*all'])
+      })
+    })
+    it('should return issues', function(done) {
+      moxios.stubRequest('/rest/api/2/search', {response: { issues: ['a', 'b', 'c']}})
+      client.all().pipe(toArray()).subscribe({
+        next(result) {
+          expect(result).to.deep.equals(['a', 'b', 'c'])
+          done()
+        }
       })
     })
   })
