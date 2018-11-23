@@ -2,14 +2,16 @@
   "name": "jira-adapter",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "target/jira-source.js",
+  "types": "src",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test": "nyc mocha test/**/*.{ts,tsx}",
     "build": "rm -rf target && tsc",
     "format": "tslint 'src/**/*.ts' --fix",
     "lint": "tslint 'src/**/*.ts'",
-    "start": "node target"
+    "start": "node target",
+    "install": "npm run build"
   },
   "nyc": {
     "all": true,
