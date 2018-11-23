@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "target/jira-source.js",
-  "types": "src",
+  "types": "src/jira-source.ts",
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "test": "nyc mocha test/**/*.{ts,tsx}",
