@@ -1,6 +1,6 @@
 {
   "name": "@agrzes/jira-adapter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "target/jira-source.js",
   "types": "src/jira-source.ts",
