@@ -3,7 +3,7 @@ import {expect} from 'chai'
 import 'mocha'
 import * as moxios from 'moxios'
 import {toArray} from 'rxjs/operators'
-import {JiraClient} from '../src/jira-source'
+import {JiraClient} from '../src'
 
 function responses(...requests: any[]) {
   requests.reverse()

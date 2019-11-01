@@ -1,21 +1,28 @@
-import axios from 'axios'
-import { Ouch, override } from 'ouch-rx'
-import * as PouchDB from 'pouchdb-http'
-import { map } from 'rxjs/operators'
-import { JiraClient } from './jira-source'
-const jiraClient = new JiraClient(axios.create({
-  baseURL: process.argv[2],
-  auth: {
-    username: process.argv[3],
-    password: process.argv[4]
-  }
-}))
 
-const db = new PouchDB(process.argv[5])
-const ouch = new Ouch(db)
-jiraClient.all().pipe(map((issue) => {
-  issue._id = issue.key
-  return issue
-}), ouch.merge(override)).subscribe({complete() {
-  //
-}})
+import { AxiosInstance } from 'axios'
+import {Observable, Observer} from 'rxjs'
+export class JiraClient {
+  constructor(private client: AxiosInstance) {}
+
+  public query(jql: string): Observable<any> {
+    return Observable.create((observer: Observer<any>) => {
+      let startAt = 0
+      const nextPage = () => this.client.post('/rest/api/2/search', {
+        jql, fields: ['*all'], maxResults: 50, startAt
+      }).then((response) => {
+        if (response.data.issues && response.data.issues.length) {
+          response.data.issues.forEach((issue) => observer.next(issue))
+          startAt = startAt + 50
+          nextPage()
+        } else {
+          observer.complete()
+        }
+      })
+      nextPage()
+    })
+  }
+
+  public all(): Observable<any> {
+    return this.query('')
+  }
+}
